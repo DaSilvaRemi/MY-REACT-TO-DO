@@ -31,7 +31,7 @@ export default function TaskContent({ taskName, content, handleCloseTaskContent,
                         />
                         <TouchableOpacity onPress={() => handleCloseTaskContent()}>
                             <View style={styles.validationWrapper}>
-                                <Text style={styles.validationText}>OK</Text>
+                                <Text style={styles.validationText}>Close</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     modal: {
         backgroundColor: "#FBE364",
-        height: '50%',
+        height: '70%',
         width: '90%',
         borderRadius: 10,
         borderWidth: 1,
