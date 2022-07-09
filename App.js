@@ -4,49 +4,67 @@ import Task from "./components/Task";
 
 export default function App() {
   const [task, setTask] = useState();
-  const [taskItems, setTasksItems] = useState([])
+  const [taskItems, setTasksItems] = useState([]);
+  const [inputIsVisible, setInputIsVisible] = useState(true);
 
   const handleAddTask = () => {
     Keyboard.dismiss();
     setTasksItems([...taskItems, task]);
-    setTask(null);
-  }
+    setTask('');
+  };
+
+  const handleInputIsVisible = (value) => {
+      setInputIsVisible(value);
+  };
 
   const completeTask = (index) => {
     const itemsCopy = [...taskItems];
     itemsCopy.splice(index, 1);
     setTasksItems(itemsCopy);
-  }
+  };
 
-  return (
-    <View style={styles.container}>
-      {/* Today's Tasks */}
+  const renderTasks = () => {
+    /* Today's Tasks */
+    return (
       <View style={styles.tasksWrapper}>
         <Text style={styles.sectionTitle}>Today's Task</Text>
         <View style={styles.items}>
           {/* This is where the tasks will  go ! */}
           {taskItems.map((item, index) => {
             return (
-              <TouchableOpacity onPress={() => completeTask(index)}>
-                  <Task key={index} text={item}/>
-              </TouchableOpacity>
+              <Task key={index} text={item} index={index} completeTask={completeTask} handleInputIsVisible={handleInputIsVisible}/>
             )
           })}
         </View>
       </View>
+    );
+  }
 
-       {/* Write a task */}
-       <KeyboardAvoidingView 
+  const renderInputs = () => {
+    /* Write a task */
+    if(!inputIsVisible){
+      return null;
+    }
+
+    return (
+      <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : 'height'}
         style={styles.writeTaskWrapper}
-        >
-          <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={(text) => setTask(text)}/>
-          <TouchableOpacity onPress={() => handleAddTask()}>
-            <View style={styles.addWrapper}>
-              <Text style={styles.addText}>+</Text>
-            </View>
-          </TouchableOpacity>
-       </KeyboardAvoidingView>
+      >
+        <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={(text) => setTask(text)} />
+        <TouchableOpacity onPress={() => handleAddTask()}>
+          <View style={styles.addWrapper}>
+            <Text style={styles.addText}>+</Text>
+          </View>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
+    )
+  }
+
+  return (
+    <View style={styles.container}>
+      {renderTasks()}
+      {renderInputs()}
     </View>
   );
 }
